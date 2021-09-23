@@ -1,0 +1,17 @@
+{
+  "name": "mimosa",
+  "version": "1.0.0",
+  "main": "mimosa.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "log4js": "^6.3.0",
+    "mqtt": "^4.2.8"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
