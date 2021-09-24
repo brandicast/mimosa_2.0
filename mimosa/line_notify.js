@@ -1,6 +1,6 @@
 
 'use strict';
-const config = require ("../mimosa/config.js") ;
+const config = require ("./config_brandon.js") ;
 const querystring = require('querystring');
 const https = require('https');
 const express = require('express');

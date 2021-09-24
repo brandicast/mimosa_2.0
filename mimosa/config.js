@@ -14,7 +14,7 @@ module.exports = {
                 categories: {
                         default: {
                                 appenders: ['out', 'app'],
-                                level: 'info'
+                                level: 'debug'
                         }
                 }
         },
@@ -25,7 +25,8 @@ module.exports = {
                 enable: true,
                 url: 'mqtt://192.168.0.17',
                 port: 1883,
-                topic: 'brandon/test'
+                topic_event: 'brandon/iot/event',
+                topic_all: 'brandon/iot/all'
         },
         line_notify: {
                 enable: false,

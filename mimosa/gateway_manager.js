@@ -1,8 +1,8 @@
-const config = require('./config.js');
+const config = require('./config_brandon.js');
 let net = require('net');
 
 let ph = require("./protocol_handler_philio.js");
-let notifier = require ('./notifier.js');
+let notifier = require('./notifier.js');
 
 const log4js = require("log4js");
 log4js.configure(config.log4js_set);

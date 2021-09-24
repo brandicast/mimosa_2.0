@@ -1,12 +1,18 @@
-const config = require('./config.js');
+const config = require('./config_brandon.js');
+
+var g = require('./globals.js');
 
 const log4js = require("log4js");
 log4js.configure(config.log4js_set);
-const logger = log4js.getLogger("Protocol_Handler_Philio");
+var logger = log4js.getLogger("Protocol_Handler_Philio");
+
+
+
+//let mqtt_client = require ("./mqtt_notify.js");
 
 var timestamp = Date.now();
 
-var g = require('./globals.js');
+
 
 function passEventFilter(event_obj) {
   let passed = false;
@@ -137,15 +143,24 @@ function saveToDatabase(json, msg) {
 
   if (g.database[json.mac] == undefined)
     g.database[json.mac] = {};
-  if (g.database[json.mac][json.eventLog] == undefined)
-    g.database[json.mac][json.eventLog] = [0];
-  if (g.database[json.mac][json.eventLog[0].uid] == undefined)
-    g.database[json.mac][json.eventLog[0].uid] = {};
-  if (g.database[json.mac][json.eventLog[0].uid][json.eventLog[0].funcType] == undefined)
-    g.database[json.mac][json.eventLog[0].uid][json.eventLog[0].funcType] = {};
-  g.database[json.mac][json.eventLog[0].uid][json.eventLog[0].funcType][json.eventLog[0].eventCode] = msg;
+  if (g.database[json.mac][String(json.eventLog[0].uid)] == undefined)
+    g.database[json.mac][String(json.eventLog[0].uid)] = {};
+  if (g.database[json.mac][String(json.eventLog[0].uid)][String(json.eventLog[0].funcType)] == undefined)
+    g.database[json.mac][String(json.eventLog[0].uid)][String(json.eventLog[0].funcType)] = {};
 
-  logger.debug("[g.database]" + JSON.stringify(g.database));
+  logger.debug("[g.database] input: " + JSON.stringify(json)); 
+  json.eventLog[0].message = msg ;    
+  g.database[json.mac][String(json.eventLog[0].uid)][String(json.eventLog[0].funcType)] = json.eventLog[0];
+
+  var dummy = {} ;  // I only want the new json format of current event
+  dummy[json.mac]= {};
+  dummy[json.mac][String(json.eventLog[0].uid)]= {}
+  dummy[json.mac][String(json.eventLog[0].uid)][String(json.eventLog[0].funcType)]= {}
+  dummy[json.mac][String(json.eventLog[0].uid)][String(json.eventLog[0].funcType)] = json.eventLog[0];
+
+  logger.debug("[g.database] output:" + JSON.stringify(g.database));
+
+  return dummy ;
 
 }
 
@@ -153,15 +168,20 @@ exports.protocolHandler = function (json) {
   var msg = "";
   if (json.mac) {
 
+    /*
     msg = "[" + timeStamp2String(parseInt(json.eventLog[0].timeStamp + get3DigitsMilisString(json.eventLog[0].timeStamp_ms))) + "]  "
       + getDeviceMappingName(json.eventLog[0]) + " : "
       + getEventTranslation(json.eventLog[0]);
-
-    saveToDatabase(json, msg);
+    */
+    msg = JSON.stringify(saveToDatabase(json, msg));
 
     if (passEventFilter(json.eventLog[0])) {
       logger.info(msg);
+      logger.level = "debug";
+      console.log (logger.level);
+      
       logger.debug(json.mac + " : " + JSON.stringify(json.eventLog[0]));
+     // mqtt_client.sendMessage("brandon/iot/raw", JSON.stringify(g.database)) ;
     }
     else
       msg = "";

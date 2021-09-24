@@ -1,4 +1,4 @@
-const config = require("./config.js");
+const config = require("./config_brandon.js");
 
 let line_notify = null;
 let mqtt = null ;
@@ -13,8 +13,7 @@ exports.sendMessageToAll  = function (message) {
     if (line_notify)
         line_notify.sendMessageToAll (message) ;
     if (mqtt)
-        mqtt.sendMessageToAll (message) ;
-    
+        mqtt.sendMessageToAll (message) ;   
 }
 
 exports.setInfoDatabase  = function (db) {
