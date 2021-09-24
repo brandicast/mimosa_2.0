@@ -176,12 +176,8 @@ exports.protocolHandler = function (json) {
     msg = JSON.stringify(saveToDatabase(json, msg));
 
     if (passEventFilter(json.eventLog[0])) {
-      logger.info(msg);
-      logger.level = "debug";
-      console.log (logger.level);
-      
-      logger.debug(json.mac + " : " + JSON.stringify(json.eventLog[0]));
-     // mqtt_client.sendMessage("brandon/iot/raw", JSON.stringify(g.database)) ;
+        logger.info(msg);      
+        logger.debug(json.mac + " : " + JSON.stringify(json.eventLog[0]));
     }
     else
       msg = "";
