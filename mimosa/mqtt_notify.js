@@ -13,12 +13,15 @@ var opt =  {
 
 var client = mqtt.connect (config.mqtt.url, opt);
 
+// Listen to any command from MQTT to perform action.
+// Subscribe to the topic config.mqtt.topic_cmd
 client.on ('connect', function ()  {
     console.log ('Connected to MQTT broker') ;
-    client.subscribe ('brandon/iot/command') ;
+    client.subscribe (config.mqtt.topic_cmd) ;
 }
 );
 
+// This is the action to perform when receiving command from config.mqtt.topic_cmd
 client.on ('message', function (topic, msg){
     console.log ('Receiving from [' + topic + '] with message : ' + msg)
     if (msg == "(STATUS)"){
