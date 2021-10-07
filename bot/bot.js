@@ -1,5 +1,5 @@
 
-let config = require("./config.js");
+let config = require("./config_brandon.js");
 const log4js = require("log4js");
 log4js.configure(config.log4js_set);
 const logger = log4js.getLogger("LineBot_Handler");
@@ -8,10 +8,10 @@ let linebot = require('linebot');
 const fs = require("fs");
 const path = require("path");
 
-let bot = linebot(config.linebot.configuration);
 
-var notifier = null;
-var database = null;
+let message = require("./resources/line_message_template.js");
+
+let bot = linebot(config.linebot.configuration);
 
 //var user_id_array = ['U17f3c29570cb4be181aa7e82b86b3ba7'];
 var MEMBERS = {};
@@ -22,37 +22,73 @@ var MEMBERS = {};
 */
 bot.on('message', function (event) {
     logger.debug(event);
-    event.reply (event.message) ;
-    /*
-    switch (event.type){
-        case "message" :{
-            event.reply("echo :" + event.message.text);
+    //event.reply (event.message) ;
+
+    var response =  Object.assign({}, message.text);  // get text json from template
+    logger.debug ("type  =" + event.message.type) ;
+    switch (event.message.type) {
+        case "text": {
+            var text = event.message.text;
+            logger.debug("TEXT = : " + text); 
+            switch (text) {
+                case "(STATUS)": {
+                    var response = Object.assign({}, message.flex.common);
+                    var carousel = Object.assign({}, message.flex.container.carousel);
+                    response.contents = carousel ;
+                    var bubbles = [];
+                    bubbles[0] = Object.assign({}, message.flex.container.bubble);
+                    bubbles[1] = Object.assign({}, message.flex.container.bubble);
+                    bubbles[0].body.contents[0].text = "I am bubble 1";
+                    bubbles[1].body.contents[0].text = "I am bubble 2";
+
+                    carousel.contents = bubbles;
+
+                    logger.debug(JSON.stringify(response));
+                    break;
+                }
+                case "(SINGLE)": {
+                    response = Object.assign({}, message.flex.common);
+                    
+                    
+                    var bubbles = [];
+                    bubbles[0] = Object.assign({}, message.flex.container.bubble);
+                    bubbles[1] = Object.assign({}, message.flex.container.bubble);
+                    bubbles[0].body.contents[0].text = "I am bubble 1";
+                    bubbles[1].body.contents[0].text = "I am bubble 2";
+
+                    response.contents = bubbles[0] ;
+                    
+                    logger.debug(JSON.stringify(response));
+                    
+                    break; 
+                }
+                default: {
+                    response.text = "ECHO : " +  event.message.text ;
+                    break;
+                }
+            }
+
+            break;
+        }
+        case "sticker": {
+            response = Object.assign({},  message.sticker); ;
+            if (event.message.packageId == "1")
+                response.stickerId = event.message.stickerId;
+            break;
+        }
+        case "location" :{
+            response.text = event.message.address + " (" + event.message.latitude + "," + event.message.longitude + ")" ;
+            break
+        }
+        case "image":  default : {
+            response.text = config.linebot.service_not_support ;
             break ;
         }
-        case "sticker":{
+    }
 
-        }
-    }
-    switch (event.message.text) {
-        case "(STATUS)": {
-            let msg = "";
-            if (database)
-                msg = JSON.stringify(database);
-            if (notifier)
-                notifier.sendMessageToAll(msg);
-            else
-                event.reply(msg);
-            break;
-        }
-        default: {
-            if (notifier)
-                notifier.sendMessageToAll(msg);
-            else
-                event.reply("echo :" + event.message.text);
-            break;
-        }
-    }
-    */
+    response["quickReply"] = message.quickReply ;
+    event.reply(response);
+ 
 });
 
 
@@ -110,15 +146,14 @@ function unregisterMember(userId) {
 
 setTimeout(function () {
     var sendMsg = config.linebot.service_is_up_string;
-    if (Object.keys(MEMBERS).length>0) {
-        bot.push(Object.keys(MEMBERS), sendMsg);    
+    if (Object.keys(MEMBERS).length > 0) {
+        bot.push(Object.keys(MEMBERS), sendMsg);
         logger.info('send: ' + Object.keys(MEMBERS) + ':' + sendMsg);
     }
-    else
-    {
-        logger.info ('No member found') ;
+    else {
+        logger.info('No member found');
     }
-    
+
 }, 3000);
 
 
@@ -147,7 +182,7 @@ function loadMemberProfiles() {
     });
 }
 
-function writeMemberProfiles (){
+function writeMemberProfiles() {
     profile_filename = path.join(__dirname, config.linebot.resource_folder, config.linebot.member_profile);
     fs.writeFileSync(profile_filename, JSON.stringify(MEMBERS));
 
@@ -156,19 +191,14 @@ function writeMemberProfiles (){
 /****************************************************************************
  *    Main Start
  ****************************************************************************/
- loadMemberProfiles() ;
+loadMemberProfiles();
 
 bot.listen('/', config.linebot.port);
 
+logger.info('Running on : ' + config.linebot.port);
+logger.info("Template  = " + JSON.stringify(message.sticker));
 
 
-exports.setNotifier = function (nf) {
-    notifier = nf;
-}
-
-exports.setInfoDatabase = function (db) {
-    database = db;
-}
 
 
 /*
