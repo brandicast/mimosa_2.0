@@ -4,3 +4,7 @@
 **/logs
 testing/node_modules
 config_brandon.js
+**/package-lock.json
+**/member.json
+package-lock.json
+member.json
