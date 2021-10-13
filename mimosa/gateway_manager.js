@@ -33,6 +33,12 @@ let server = net.createServer(function (socket) {
           event_msg = ph.protocolHandler(dataJson);
           if (event_msg.length > 0)
             notifier.sendMessageToAll(event_msg);
+
+          var mac = dataJson.mac ;
+          var uid = dataJson.eventLog[0].uid ;
+          var funcType = dataJson.eventLog[0].funcType ;
+          var mqtt_topic = config.mqtt.topic_prefix + "/" + mac  + "/" + uid + "/" + funcType ;
+          notifier.sendMessage(mqtt_topic,JSON.stringify(dataJson.eventLog[0]));
         }
       }
     }
