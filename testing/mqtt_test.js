@@ -4,11 +4,11 @@ var opt =  {
     clientId: 'nodejs-8F'
 };
 
-var client = mqtt.connect ('mqtt://192.168.0.17', opt);
+var client = mqtt.connect ('mqtt://192.168.0.18', opt);
 
 client.on ('connect', function ()  {
     console.log ('Connected to MQTT broker') ;
-    //client.subscribe ('brandon/iot_command') ;
+    client.subscribe ('brandon/iot/zwave/philio/#') ;
 }
 );
 
@@ -17,4 +17,4 @@ client.on ('message', function (topic, msg){
 });
 
 
-client.publish("brandon/iot/command", "(STATUS)")
+//client.publish("brandon/iot/command", "(STATUS)")
