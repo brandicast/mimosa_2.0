@@ -16,6 +16,10 @@ exports.sendMessageToAll  = function (message) {
         mqtt.sendMessageToAll (message) ;   
 }
 
+exports.sendMessage = function (topic, message) {
+    mqtt.sendMessage(topic, message) ;
+}
+
 exports.setInfoDatabase  = function (db) {
     line_notify.setInfoDatabase (db) ;
 }
