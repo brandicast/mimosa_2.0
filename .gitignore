@@ -8,3 +8,8 @@ config_brandon.js
 **/member.json
 package-lock.json
 member.json
+bot/package.json
+.gitignore
+testing/package-lock.json
+bot/resources/member.json
+
