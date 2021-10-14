@@ -37,9 +37,7 @@ module.exports = {
                 enable: true,
                 url: 'mqtt://192.168.0.17',
                 port: 1883,
-                topic_event: 'brandon/iot/event',
-                topic_all: 'brandon/iot/all',
-                topic_cmdn: 'brandon/iot/command'
+                topic: 'brandon/iot/zwave/philio/event/#'
 
         },
         line_notify: {

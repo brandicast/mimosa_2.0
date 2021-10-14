@@ -8,12 +8,14 @@ let linebot = require('linebot');
 const fs = require("fs");
 const path = require("path");
 
-
+let composer = require ("./line_message_formatter.js") ;
 let message = require("./resources/line_message_template.js");
+
+const subscriber = require("./mqtt_subscriber.js");
 
 let bot = linebot(config.linebot.configuration);
 
-//var user_id_array = ['U17f3c29570cb4be181aa7e82b86b3ba7'];
+
 var MEMBERS = {};
 
 /*  
@@ -21,18 +23,14 @@ var MEMBERS = {};
   
 */
 bot.on('message', function (event) {
-    logger.debug(event);
-    //event.reply (event.message) ;
-
-    var response =  Object.assign({}, message.text);  // get text json from template
-    logger.debug ("type  =" + event.message.type) ;
+    var response ; // get text json from template
     switch (event.message.type) {
         case "text": {
             var text = event.message.text;
             logger.debug("TEXT = : " + text); 
             switch (text) {
                 case "(STATUS)": {
-                    var response = Object.assign({}, message.flex.common);
+                    response = Object.assign({}, message.flex.common);
                     var carousel = Object.assign({}, message.flex.container.carousel);
                     response.contents = carousel ;
                     var bubbles = [];
@@ -40,29 +38,28 @@ bot.on('message', function (event) {
                     bubbles[1] = Object.assign({}, message.flex.container.bubble);
                     bubbles[0].body.contents[0].text = "I am bubble 1";
                     bubbles[1].body.contents[0].text = "I am bubble 2";
-
                     carousel.contents = bubbles;
-
                     logger.debug(JSON.stringify(response));
                     break;
                 }
                 case "(SINGLE)": {
                     response = Object.assign({}, message.flex.common);
-                    
-                    
-                    var bubbles = [];
-                    bubbles[0] = Object.assign({}, message.flex.container.bubble);
-                    bubbles[1] = Object.assign({}, message.flex.container.bubble);
-                    bubbles[0].body.contents[0].text = "I am bubble 1";
-                    bubbles[1].body.contents[0].text = "I am bubble 2";
-
-                    response.contents = bubbles[0] ;
-                    
+                    var bubble = Object.assign({}, message.flex.container.bubble);
+                    bubble.body.contents[0].text = "I am bubble 1";
+                    response.contents = bubble ;
                     logger.debug(JSON.stringify(response));
-                    
                     break; 
                 }
+                case "(status)" : {
+                    response = composer.getStatus();
+                    break;
+                }
+                case "(raw)" :{
+                    response = composer.getRawData() ;
+                    break;
+                }
                 default: {
+                    response =  Object.assign({}, message.text); 
                     response.text = "ECHO : " +  event.message.text ;
                     break;
                 }
@@ -196,7 +193,7 @@ loadMemberProfiles();
 bot.listen('/', config.linebot.port);
 
 logger.info('Running on : ' + config.linebot.port);
-logger.info("Template  = " + JSON.stringify(message.sticker));
+
 
 
 
