@@ -24,9 +24,7 @@ client.on ('connect', function ()  {
 // This is the action to perform when receiving command from config.mqtt.topic_cmd
 client.on ('message', function (topic, msg){
     console.log ('Receiving from [' + topic + '] with message : ' + msg)
-    if (msg == "(STATUS)"){
-        sendMsg (config.mqtt.topic_all, JSON.stringify(g.database));
-    }
+    ///  To be do.
 });
 
 function sendMsg(topic, msg){

@@ -300,7 +300,7 @@ module.exports = {
                 "type": "action",
                 "action": {
                     "type": "message",
-                    "label": "Status",
+                    "label": "status",
                     "text": "(status)"
                 }
 
@@ -309,7 +309,7 @@ module.exports = {
                 "type": "action",
                 "action": {
                     "type": "message",
-                    "label": "Raw",
+                    "label": "raw message",
                     "text": "(raw)"
                 }
 

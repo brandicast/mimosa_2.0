@@ -14,6 +14,8 @@ let server = net.createServer(function (socket) {
 
   socket.on('data', function (data) {
 
+    logger.debug("[Raw Data] " + data);
+
     var newData = new String(data).replace('\0', '').split("\n");
 
     for (var i = 0; i < newData.length; i++) {
@@ -22,23 +24,21 @@ let server = net.createServer(function (socket) {
 
         try {
           dataJson = JSON.parse(processData);
-        }
-        catch (e) {
+        } catch (e) {
           logger.debug(e.code + ":" + e.message);
           logger.debug(e.stack);
           logger.error("[EXCEPTION] " + "#" + processData + "#");
           dataJson = null;
         }
-        if (dataJson != null) {
-          event_msg = ph.protocolHandler(dataJson);
-          if (event_msg.length > 0)
-            notifier.sendMessageToAll(event_msg);
-
-          var mac = dataJson.mac ;
-          var uid = dataJson.eventLog[0].uid ;
-          var funcType = dataJson.eventLog[0].funcType ;
-          var mqtt_topic = config.mqtt.topic_prefix + "/" + mac  + "/" + uid + "/" + funcType ;
-          notifier.sendMessage(mqtt_topic,JSON.stringify(dataJson.eventLog[0]));
+        if (dataJson != null && dataJson.mac) {
+          logger.debug(JSON.stringify(dataJson));
+          var mac = dataJson.mac;
+          var uid = dataJson.eventLog[0].uid;
+          var funcType = dataJson.eventLog[0].funcType;
+          var mqtt_topic = config.mqtt.topic_prefix + "/" + mac + "/" + uid + "/" + funcType;
+          notifier.sendMessage(mqtt_topic, JSON.stringify(dataJson.eventLog[0]));
+        } else {
+          logger.info("[NOTE]  This is something not handle : " + processData);
         }
       }
     }

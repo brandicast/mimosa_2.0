@@ -45,6 +45,27 @@ module.exports = {
                 100: "Repeater"
             },
             productCode: {
+                
+                "01010000": {
+                    name: "Philio All Switch",
+                    img: "https://www.z-wave.com/logo.svg"
+                },
+                "01010001":{
+                    name : "Philio Sun Rise",
+                    img:"https://photos.app.goo.gl/YmRVqa7MyAgQ1wHt5"
+                },
+                "01010002":{
+                    name : "Philio Sun Set",
+                    img:"https://photos.app.goo.gl/YmRVqa7MyAgQ1wHt5"
+                },
+                "01010003":{
+                    name:"Philio Scene Status",
+                    img:"https://images.squarespace-cdn.com/content/v1/5c1afbd1266c07479bc41525/7d5ad760-51d2-40c8-8539-73278e67684a/philio-logo03.png?format=1500w"
+                },
+                "01010004":{
+                    name:"Philio Timer",
+                    img:"https://images.squarespace-cdn.com/content/v1/5c1afbd1266c07479bc41525/7d5ad760-51d2-40c8-8539-73278e67684a/philio-logo03.png?format=1500w"
+                },
                 "0101020C": {
                     name: "Philio PST02-A 4 in 1 Multi-Sensor",
                     img: "https://images.squarespace-cdn.com/content/v1/5c1afbd1266c07479bc41525/1546915375772-G6YTQXMOHXN5G92J1BD9/image-asset.png?format=500w"
@@ -68,7 +89,10 @@ module.exports = {
                 "01010128": {
                     name: "Philio PAN15 Smart Energy Plug-in Switch",
                     img: "https://images.squarespace-cdn.com/content/v1/5c1afbd1266c07479bc41525/1546936444690-5MCB3CDXQKH8J7CPU91S/PAN15-0101.png?format=500w"
-
+                },
+                "FFFFFFFF": {
+                    name: "Not Avaiable",
+                    img: "https://www.z-wave.com/logo.svg"
                 }
             },
             eventCode: {
