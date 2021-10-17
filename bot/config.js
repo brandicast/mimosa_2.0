@@ -39,8 +39,5 @@ module.exports = {
                 port: 1883,
                 topic: 'brandon/iot/zwave/philio/event/#',
 
-        },
-        line_notify: {
-                enable: true
         }
 }

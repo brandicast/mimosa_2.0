@@ -1,4 +1,4 @@
-var config = require("./config_brandon.js");
+var config = require("./config.js");
 
 const log4js = require("log4js");
 log4js.configure(config.log4js_set);
