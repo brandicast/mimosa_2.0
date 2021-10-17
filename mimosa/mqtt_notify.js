@@ -8,7 +8,7 @@ var mqtt  = require ('mqtt');
 
 var opt =  {
     port:config.mqtt.port,
-    clientId: 'nodejs'
+    clientId: 'mimosa'
 };
 
 var client = mqtt.connect (config.mqtt.url, opt);
@@ -16,14 +16,14 @@ var client = mqtt.connect (config.mqtt.url, opt);
 // Listen to any command from MQTT to perform action.
 // Subscribe to the topic config.mqtt.topic_cmd
 client.on ('connect', function ()  {
-    console.log ('Connected to MQTT broker') ;
+    logger.info ('Connected to MQTT broker') ;
     client.subscribe (config.mqtt.topic_cmd) ;
 }
 );
 
 // This is the action to perform when receiving command from config.mqtt.topic_cmd
 client.on ('message', function (topic, msg){
-    console.log ('Receiving from [' + topic + '] with message : ' + msg)
+    logger.info ('Receiving from [' + topic + '] with message : ' + msg)
     ///  To be do.
 });
 
