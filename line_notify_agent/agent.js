@@ -35,8 +35,12 @@ function formatMessage (raw) {
     var productCode = eventObject.productCode.toString(16).toUpperCase().padStart(8, "0");
     var eventCode = eventObject.eventCode;
     var battery = eventObject.battery;
-
-    message_to_line_notify =  g.mapping_table.philio.productCode[productCode].name + "(" + device_id +") : " + funcName + " ----> " ;
+    if(g.mapping_table.philio.productCode[productCode].name ) {
+        message_to_line_notify =  g.mapping_table.philio.productCode[productCode].name + "(" + device_id +") : " + funcName + " ----> " ;
+    } else {
+        message_to_line_notify =  " Not define ";
+    }
+    
     switch (eventCode) {
         case 4801: { //Temperature
             var unit = eventObject.dataUnit;
