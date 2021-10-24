@@ -4,6 +4,7 @@ module.exports = {
     mapping_table: {
         philio: {
             function_type: {
+                0: "N/A",
                 11: "Temperature Sensor",
                 12: "Illumination Sensor",
                 13: "Door / Window Sensor",
@@ -45,7 +46,10 @@ module.exports = {
                 100: "Repeater"
             },
             productCode: {
-                
+                "00000000": {
+                    name: "N/A",
+                    img: "https://www.z-wave.com/logo.svg"
+                },
                 "01010000": {
                     name: "Philio All Switch",
                     img: "https://www.z-wave.com/logo.svg"
